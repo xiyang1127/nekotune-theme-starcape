@@ -13,22 +13,47 @@ jobs:
       - run: cmake -S . -B build
       - run: cmake --build build
       - run: ctest --test-dir build --output-on-failure --no-tests=error
-      - name: Write checksums
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - name: Test release tooling and prepare versioned assets
         run: |
-          cd build/packages
-          for package in *.zip; do sha256sum "$package" > "$package.sha256"; done
+          uv run --no-project --python 3.12 -m unittest discover -s tests -p test_release.py
+          uv run --no-project --python 3.12 scripts/release.py prepare --manifest theme/extension.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: starcape-theme
-          path: build/packages/*
-      - name: Create draft release
-        if: startsWith(github.ref, 'refs/tags/v')
+          name: extension-any
+          path: build/release/*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: extension-*
+          path: dist
+          merge-multiple: true
+      - name: Verify complete release and write checksums
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          test "$TAG" = "v$(jq -r .version theme/extension.json)"
-          gh release create "$TAG" build/packages/* --verify-tag --generate-notes --draft
-    permissions:
-      contents: write
+          uv run --no-project --python 3.12 scripts/release.py finalize \
+            --manifest theme/extension.json --output dist --platforms any --tag "$TAG"
+          uv run --no-project --python 3.12 scripts/release.py verify \
+            --manifest theme/extension.json --output dist --platforms any --tag "$TAG"
+          (cd dist && sha256sum -c SHA256SUMS.txt)
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          RELEASE_NAME: 星穹 · Starcape
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" dist/* --verify-tag --title "$RELEASE_NAME $TAG" \
+            --notes-file RELEASE_NOTES.md --generate-notes --draft

@@ -24,3 +24,6 @@
 实际安装、切换和更新验收后再公开。静态包检查不替代视觉和宿主交互验收。
 原有 tests/integration_test.cpp 可通过宿主的
 NEKOTUNE_EXTERNAL_TESTS_DIR=/path/to/nekotune-theme-starcape/tests 运行。
+
+
+安装包、构建信息及校验文件的统一命名与复现命令见 [发布规范](RELEASING.md)。本次更新见 [发行说明](RELEASE_NOTES.md)。
