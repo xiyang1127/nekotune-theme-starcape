@@ -26,4 +26,4 @@
 NEKOTUNE_EXTERNAL_TESTS_DIR=/path/to/nekotune-theme-starcape/tests 运行。
 
 
-安装包、构建信息及校验文件的统一命名与复现命令见 [发布规范](RELEASING.md)。本次更新见 [发行说明](RELEASE_NOTES.md)。
+安装包及校验文件的统一命名与复现命令见 [发布规范](RELEASING.md)。本次更新见 [发行说明](RELEASE_NOTES.md)。
