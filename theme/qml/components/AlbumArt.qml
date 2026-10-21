@@ -1,0 +1,113 @@
+import QtQuick
+import QtQuick.Controls
+
+// The backend supplies one canonical artwork URL for this song.
+// Render the local placeholder underneath the asynchronous image.
+// Show the replacement only after Image.Ready to avoid empty/error frames.
+// No-song state has its own artwork rather than reusing a stale URL.
+// Component sizing follows its container without changing cover precedence.
+Item {
+    id: root
+
+    property bool hasSong: false
+    property string coverUrl: ""
+    property string playbackState: "stopped"
+    property real maxDimension: 280
+    property color lavenderColor: Theme.accentPrimary
+    property color roseColor: Theme.accentSecondary
+
+    readonly property bool isPlaying: playbackState === "playing"
+    readonly property real artSize: Math.min(Math.min(parent.width, parent.height), root.maxDimension)
+
+    // Ambient glow behind the cover: several faint stacked layers give a soft
+    // falloff without GPU effects, so no hard frame edge shows.
+    Repeater {
+        model: 6
+        delegate: Rectangle {
+            required property int index
+            anchors.centerIn: coverCard
+            width: coverCard.width + (index + 1) * 12
+            height: width
+            radius: coverCard.radius + (index + 1) * 6
+            color: root.hasSong ? Qt.rgba(root.lavenderColor.r, root.lavenderColor.g, root.lavenderColor.b, 0.018) : "transparent"
+            z: -1 - index
+        }
+    }
+
+    Rectangle {
+        id: coverCard
+        anchors.centerIn: parent
+        width: Math.max(140, root.artSize)
+        height: width
+        radius: Theme.radiusLg
+        color: Theme.bgSurface
+        clip: true
+
+        // Image if has song
+        Image {
+            anchors.fill: parent
+            source: Qt.resolvedUrl("../../assets/artwork-default.png")
+            fillMode: Image.PreserveAspectCrop
+            smooth: true
+            mipmap: true
+            visible: root.hasSong
+        }
+
+        Image {
+            anchors.fill: parent
+            source: root.hasSong ? Theme.artwork(root.coverUrl) : ""
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            smooth: true
+            mipmap: true
+            visible: root.hasSong && status === Image.Ready
+        }
+
+        // Placeholder artwork if no song
+        Item {
+            anchors.fill: parent
+            visible: !root.hasSong
+
+            Rectangle {
+                anchors.fill: parent
+                color: Theme.bgSidebar
+            }
+
+            Canvas {
+                anchors.centerIn: parent
+                width: 48
+                height: 48
+                property color strokeColor: Theme.borderSubtle
+                onStrokeColorChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.strokeStyle = strokeColor
+                    ctx.lineWidth = 2
+                    ctx.lineCap = "round"
+                    ctx.lineJoin = "round"
+                    const w = width, h = height
+                    // Music note icon
+                    ctx.beginPath()
+                    ctx.moveTo(w * 0.7, h * 0.2)
+                    ctx.lineTo(w * 0.7, h * 0.65)
+                    ctx.moveTo(w * 0.7, h * 0.28)
+                    ctx.lineTo(w * 0.9, h * 0.22)
+                    ctx.stroke()
+                    ctx.beginPath()
+                    ctx.arc(w * 0.5, h * 0.7, w * 0.2, 0, Math.PI * 2)
+                    ctx.stroke()
+                }
+            }
+        }
+
+        // Inner subtle border highlight
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            color: "transparent"
+            border.color: Theme.borderSubtle
+            border.width: 1
+        }
+    }
+}

@@ -1,0 +1,80 @@
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import NekoTune 1.0
+import "../components"
+Item {
+    id: page
+    required property var shell
+    required property var controllers
+    required property var translator
+    required property var transport
+    readonly property var extensions: controllers.extensions || null
+    readonly property var settingsPages: extensions ? extensions.settingsPages : []
+    readonly property bool appearance: shell.settingsSection === "appearance"
+    readonly property var selected: settingsPages.find(item => item.id === shell.settingsSection) || ({})
+    onSettingsPagesChanged: {
+        if (shell && shell.settingsSection && shell.settingsSection !== "appearance" && !settingsPages.some(item => item.id === shell.settingsSection))
+            shell.host.settingsSection = ""
+    }
+    signal importRequested(int playlistId)
+    signal editRequested(var song)
+    SettingsPanel {
+        anchors.fill: parent; anchors.margins: 20
+        visible: !page.selected.id && !page.appearance
+        appearanceAvailable: Boolean(page.controllers.theme)
+        onAppearanceRequested: page.shell.navigate("appearance")
+        databasePath: page.shell.databasePath
+        client: page.controllers.settings; ai: page.controllers.ai
+        audioOutput: page.controllers.audioOutput || null
+        playback: page.controllers.playback || null
+        storage: page.controllers.storage || null
+        desktop: page.shell.desktop || null
+        windowModes: page.shell.host.windowModes || null
+        wallpaper: page.shell.host.wallpaper || null
+        themeController: page.controllers.theme || null
+        connected: page.transport.connected; translator: page.translator
+        extensionSettings: page.settingsPages.map(item => ({id: item.id, title: page.extensions.label(item.title, page.translator.language)}))
+        onExtensionSettingsRequested: function(id) { page.shell.navigate(id) }
+    }
+    ColumnLayout {
+        anchors.fill: parent; anchors.margins: 20; spacing: Theme.spaceMd
+        visible: Boolean(page.selected.id) || page.appearance
+        RowLayout {
+            Layout.fillWidth: true
+            TextButton {
+                objectName: "settingsBackButton"
+                text: "‹ " + page.translator.text("settings", page.translator.language)
+                subtle: true
+                onClicked: page.shell.navigate("settings")
+            }
+            Label { text: " / "; color: Theme.textMuted }
+            Label {
+                objectName: "settingsSubpageTitle"
+                Layout.fillWidth: true
+                text: page.appearance ? page.translator.text("appearance", page.translator.language) : page.extensions ? page.extensions.label(page.selected.title || "", page.translator.language) : ""
+                color: Theme.textPrimary; font.pixelSize: Theme.fontDialogTitle
+                textFormat: Text.PlainText; elide: Text.ElideRight
+            }
+        }
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true
+            Loader {
+                anchors.fill: parent
+                active: page.appearance && Boolean(page.controllers.theme)
+                sourceComponent: AppearancePanel { controller: page.controllers.theme; translator: page.translator }
+            }
+            ExtensionView {
+                id: extension; anchors.fill: parent
+                descriptor: page.appearance ? ({}) : page.selected
+                controllers: page.controllers; translator: page.translator; hostWindow: page.shell
+            }
+            Label {
+                anchors.centerIn: parent; width: parent.width
+                visible: extension.error !== ""; text: extension.error
+                color: Theme.statusError; wrapMode: Text.Wrap; textFormat: Text.PlainText
+            }
+        }
+    }
+}

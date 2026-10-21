@@ -1,0 +1,129 @@
+{
+  "id": "nekotune.theme-starcape",
+  "name": "Starcape",
+  "version": "1.1.1",
+  "apiVersion": 1,
+  "type": "theme",
+  "contributes": {
+    "themes": [
+      {
+        "id": "default",
+        "title": {
+          "zh": "星穹 · Starcape",
+          "en": "Starcape"
+        },
+        "author": "NekoTune",
+        "schemaVersion": 1,
+        "tokens": {
+          "glowOpacity": 0.08,
+          "fontFamily": "sans-serif",
+          "fontFamilyMonospace": "Monospace, 'Noto Sans Mono', monospace",
+          "fontTitle": 20,
+          "fontSongTitle": 20,
+          "fontDialogTitle": 16,
+          "fontBody": 14,
+          "fontBodySecondary": 13,
+          "fontCaption": 12,
+          "fontLyricsWide": 24,
+          "fontLyricsCompact": 20,
+          "lineHeightBody": 1.5,
+          "lineHeightLyrics": 1.6,
+          "spaceXs": 4,
+          "spaceSm": 8,
+          "spaceMd": 12,
+          "spaceLg": 16,
+          "spaceXl": 24,
+          "space2Xl": 32,
+          "space3Xl": 48,
+          "radiusSm": 10,
+          "radiusMd": 14,
+          "radiusLg": 18,
+          "radiusFull": 999,
+          "sidebarWidthWide": 220,
+          "sidebarWidthCompact": 180,
+          "bottomBarHeight": 72,
+          "songRowHeight": 56,
+          "songThumbnailSize": 40,
+          "controlMinHeight": 40,
+          "iconButtonSize": 40,
+          "iconButtonDenseSize": 32,
+          "playButtonSize": 44,
+          "artworkCompact": 224,
+          "artworkWide": 280,
+          "reducedMotion": false,
+          "durationFast": 120,
+          "durationNormal": 180,
+          "durationDrawer": 200,
+          "durationSmooth": 240,
+          "durationScroll": 280
+        },
+        "variants": {
+          "light": {
+            "tokens": {
+              "bgCanvas": "#F4F6FB",
+              "bgSidebar": "#EDF1F9",
+              "bgSurface": "#FFFFFF",
+              "bgRaised": "#E8EDF7",
+              "bgHover": "#DFE7F5",
+              "bgSelected": "#D8E4F8",
+              "borderSubtle": "#D0D9EA",
+              "borderControl": "#7383A1",
+              "textPrimary": "#17253E",
+              "textSecondary": "#354862",
+              "textMuted": "#4B5E78",
+              "textDisabled": "#78859A",
+              "textOnAccent": "#FFFFFF",
+              "accentPrimary": "#355FA2",
+              "accentHover": "#294E8C",
+              "accentPressed": "#204175",
+              "accentSecondary": "#79602B",
+              "statusSuccess": "#226844",
+              "statusWarning": "#79551F",
+              "statusError": "#A9324B",
+              "statusErrorBg": "#F8E3E9",
+              "statusInfo": "#355FA2",
+              "bgCanvasTop": "#F8FAFE",
+              "bgElevated": "#EEF2FA",
+              "accentGlow": "#CBD8F2",
+              "roseGlow": "#E4DDC9"
+            }
+          },
+          "dark": {
+            "tokens": {
+              "bgCanvas": "#070A14",
+              "bgSidebar": "#0A0F1E",
+              "bgSurface": "#111729",
+              "bgRaised": "#1E2740",
+              "bgHover": "#242F4D",
+              "bgSelected": "#2A3656",
+              "borderSubtle": "#202942",
+              "borderControl": "#6E7DA3",
+              "textPrimary": "#F1F4FB",
+              "textSecondary": "#C4CCE0",
+              "textMuted": "#8A94B0",
+              "textDisabled": "#586180",
+              "textOnAccent": "#08122B",
+              "accentPrimary": "#9CBDF5",
+              "accentHover": "#B4D0FA",
+              "accentPressed": "#7FA8E8",
+              "accentSecondary": "#E9D7A8",
+              "statusSuccess": "#7FD8B0",
+              "statusWarning": "#E7C77E",
+              "statusError": "#FF8FA3",
+              "statusErrorBg": "#3A1E26",
+              "statusInfo": "#9DBEF5",
+              "bgCanvasTop": "#0B1020",
+              "bgElevated": "#161D31",
+              "accentGlow": "#233154",
+              "roseGlow": "#2A2A44"
+            }
+          }
+        },
+        "ui": {
+          "shell": "qml/Shell.qml",
+          "wallpaper": "qml/Wallpaper.qml"
+        }
+      }
+    ]
+  }
+}
