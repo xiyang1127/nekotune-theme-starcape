@@ -27,9 +27,9 @@ uv run --no-project --python 3.12 scripts/release.py prepare --manifest theme/ex
 
 ```sh
 uv run --no-project --python 3.12 scripts/release.py finalize \
-  --manifest theme/extension.json --output dist --platforms any --tag v1.1.2
+  --manifest theme/extension.json --output dist --platforms any --tag v1.1.3
 uv run --no-project --python 3.12 scripts/release.py verify \
-  --manifest theme/extension.json --output dist --platforms any --tag v1.1.2
+  --manifest theme/extension.json --output dist --platforms any --tag v1.1.3
 cd dist
 sha256sum -c SHA256SUMS.txt
 ```

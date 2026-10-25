@@ -1,8 +1,7 @@
-本次为发布规范维护版本，插件功能和设置不变。
+修复新宿主中的主题壁纸声明，保留现有星穹配色与定制界面。
 
-- 原生安装包统一为 `<插件ID>-<版本>-linux.zip` / `windows.zip`；平台无关主题使用 `<插件ID>-<版本>.zip`。
-- 下载附件只保留安装包和 `SHA256SUMS.txt`，不再提供 JSON 构建信息附件。
-- `SHA256SUMS.txt` 覆盖所有 ZIP，构建环境在 CI 中校验并记录。
-- 发布前自动校验标签、清单版本、ZIP 结构和平台完整性。
+- 将壁纸入口移至 `contributes.themes[].wallpaper`，适配当前外观接口。
+- 补充主题说明，增强浅色／深色变体及壁纸文件完整性校验。
+- 更新宿主运行时就绪检测。
 
-安装：下载 `nekotune.theme-starcape-1.1.2.zip`，从 NekoTune「设置 → 外观」导入；同一份包适用于 Linux 和 Windows。
+安装：下载 `nekotune.theme-starcape-1.1.3.zip`，在 NekoTune「设置 → 外观」导入。适用于 Linux 和 Windows；建议使用 NekoTune v2.0.0 或更新的兼容宿主。含 QML 的界面与壁纸需要确认信任。

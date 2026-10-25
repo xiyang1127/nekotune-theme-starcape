@@ -142,7 +142,7 @@ private slots:
         ExtensionPeer peer;
         peer.socket.connectToServer(runtime.serverName());
         QVERIFY(peer.socket.waitForConnected(3000));
-        QTRY_VERIFY_WITH_TIMEOUT(peer.call("extensions.list").value("data").toObject().value("runtimeReady").toBool(), 15000);
+        QTRY_VERIFY_WITH_TIMEOUT(peer.call("extensions.list").value("data").toObject().value("runtime").toObject().value("ready").toBool(), 15000);
         auto installed = peer.call("extensions.install", {{"path", QStringLiteral(STARCAPE_PACKAGE)}, {"themeOnly", true}});
         QVERIFY2(installed.value("status") == "ok", qPrintable(QString::fromUtf8(QJsonDocument(installed).toJson())));
         IpcClient client;

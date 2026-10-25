@@ -20,6 +20,12 @@ with zipfile.ZipFile(sys.argv[1]) as package:
     themes = manifest["contributes"]["themes"]
     assert themes, "No themes declared"
     for theme in themes:
+        assert theme.get("schemaVersion") == 1, "Theme schemaVersion must be 1"
+        assert {"light", "dark"} <= set(theme.get("variants", {})), "Both light and dark variants are required"
+        assert "wallpaper" not in theme.get("ui", {}), "Use top-level wallpaper instead of ui.wallpaper"
+        wallpaper = theme.get("wallpaper")
+        assert isinstance(wallpaper, str) and wallpaper.endswith(".qml") and wallpaper in names, \
+            f"Missing wallpaper QML: {wallpaper}"
         for name in theme.get("ui", {}).values():
             assert isinstance(name, str) and name in names, f"Missing UI: {name}"
     assert "assets/artwork-default.png" in names, "Default artwork missing"

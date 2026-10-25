@@ -14,6 +14,10 @@
 更新使用「更新主题包」，重新加载不会安装新 ZIP。故障时用 Ctrl+Shift+E 恢复界面，
 或以 --safe-mode 启动宿主。
 
+壁纸入口已迁移为主题贡献的顶层 `wallpaper` 字段，需要支持该格式的宿主。
+旧包出现 `Theme wallpaper moved from ui.wallpaper to wallpaper` 时，使用新构建的 ZIP 更新主题包。
+在「设置 → 外观 → 壁纸」选择 Starcape，再到「动态音乐壁纸」手动启用。
+
 同一份包可用于 Linux 和 Windows，宿主界面 API 必须兼容。
 详细功能和资源来源见 [功能说明](docs/FEATURES.md)，历史宿主验收见 [验收记录](VALIDATION.md)。
 
